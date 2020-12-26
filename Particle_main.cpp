@@ -14,30 +14,28 @@
 #include "TROOT.h"
 #include"TRandom.h"
 
-int main()
-{
+
+void macro(){
 	gROOT->LoadMacro("PartycleType.cpp+");
 	gROOT->LoadMacro("ResonanceType.cpp+");
 	gROOT->LoadMacro("Particle.cpp+");
 	gRandom->SetSeed();
 	int  n_gen=100000;
-	int num_particle=130;
+	int num_particle=120;
 TFile *file= new TFile("Particles.root","RECREATE");
-TH1D * h1=new TH1D("h1", "test histogram", 7,0,7);
-TH1D * h2= new TH1D("h2","THeta",100,0,TMath::Pi());
-TH1D *h3=new TH1D("h3","phi",100,0,TMath::Pi()*2);
-TH1D *pp =new TH1D("pp","P",100,0,5);
-TH1D *trasvp= new TH1D("trasvp","",100,0,5);
-TH1D *energy=new TH1D("energy","Energy of particle",100,0,5);//viene malissimo
-TH1D *massInvariant =new TH1D("MassInvariant","Mass invariant",100,0,5);	
-TH1D *massID =new TH1D ("massID","Mass invariant discord",100,0,5);
-TH1D *massIC= new TH1D("massIC", "Mass invariant concorde",100,0,5);
-TH1D *mass_p_k_d =new TH1D("mass_p_k_d","Mass discord pion katon",100,0,2);
-TH1D *mass_p_k_c =new TH1D("mass_p_k_c","Mass concord pion katon",100,0,2);
-TH1D *mass_inv_decad= new TH1D("mass_inv_decad","Mass decade",100,0,2);
-/////////////////////////////////////////////////////////////////////////////////
-TH1D *sottrazione_1=new TH1D("sottrazione_1","k*3-4",100,0,2);
-TH1D * sottrazione_2=new TH1D("sottrazione_2","sottrazione 2",100,0,5);
+TH1F * h1=new TH1F("Particles", "Particles", 7,0,7);
+TH1F * h2= new TH1F("theta","Theta",100,0,TMath::Pi());
+TH1F *h3=new TH1F("phi","phi",100,0,TMath::Pi()*2);
+TH1F *pp =new TH1F("Impulse","Impulse",100,0,5);
+TH1F *trasvp= new TH1F("TraversP","Traverse Impulse",100,0,5);
+TH1F *energy=new TH1F("Energy","Energy of particle",100,0,5);//viene malissimo
+TH1F *massInvariant =new TH1F("MassInvariant","Mass invariant",100,0,2);	
+TH1F *massID =new TH1F ("massID","Mass invariant discord",100,0,2);
+TH1F *massIC= new TH1F("massIC", "Mass invariant concorde",100,0,2);
+TH1F *mass_p_k_d =new TH1F("mass_p_k_d","Mass discord pion katon",100,0,2);
+TH1F *mass_p_k_c =new TH1F("mass_p_k_c","Mass concord pion katon",100,0,2);
+TH1F *mass_inv_decad= new TH1F("mass_inv_decad","Mass decadimenti",100,0,2);
+
 	Particle::AddParticleType("pioni+",1,0.13957);//0
 	Particle::AddParticleType("pioni",-1,0.13957);//1
 	Particle::AddParticleType("kaoni+",1,0.49367);//2
@@ -70,7 +68,7 @@ TH1D * sottrazione_2=new TH1D("sottrazione_2","sottrazione 2",100,0,5);
 				else if(num_generate<0.945) {Part[j].setter(4);}
 				else if(num_generate<0.99)  {Part[j].setter(5);}
 				else {						 Part[j].setter(6);
-					if(num_generate>0.995){
+					if(num_generate<0.995){
 					Part[100+counter].setter(0);
 					Part[100+counter+1].setter(3);
 					Part[j].Decay2body(Part[100+counter],Part[100+counter+1]);
@@ -86,7 +84,7 @@ TH1D * sottrazione_2=new TH1D("sottrazione_2","sottrazione 2",100,0,5);
 			}
 			energy->Fill(Part[j].GetEnergy());
 			if(Part[j].Get_index()>=0){
-				h1->Fill(Part[j].Get_index());		//Fill particelle generate		
+				h1->Fill(Part[j].Get_index());				
 			}					
 		}	
 	  for(int k=0;k<100+counter;++k){
@@ -109,15 +107,17 @@ TH1D * sottrazione_2=new TH1D("sottrazione_2","sottrazione 2",100,0,5);
 		  }
 	  }
 	}
-	h2->Fit("pol0");
-	h3->Fit("pol0");
-	pp->Fit("expo");
-	mass_inv_decad->Fit("gaus");
-	sottrazione_1->Add(mass_p_k_d,mass_p_k_c,1,-1);
-	sottrazione_1->Fit("gaus","Q","",0.6,1.3);
-	//sottrazione_1->GetXaxis()->SetRangeUser(0,2);
-	sottrazione_2->Add(massID,massIC,1,-1);
-	sottrazione_2->Fit("gaus");
-	file->Write();
+	h1->Write();
+	h2->Write();
+	h3->Write();
+	pp->Write();
+	trasvp->Write();
+	energy->Write();
+	massInvariant->Write();
+	massID->Write();
+	massIC->Write();
+	mass_p_k_d->Write();
+	mass_p_k_c->Write();
+	mass_inv_decad->Write();
 	file->Close();
 }
