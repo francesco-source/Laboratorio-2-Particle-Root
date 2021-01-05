@@ -1,18 +1,15 @@
-#pragma once
-#include<iostream>
+#ifndef RESONANCETYPE_HPP
+#define RESONANCETYPE_HPP
 
-class PartycleType {
+#include "ParticleType.hpp"
+
+class ResonanceType : public PartycleType {
 public:
-	PartycleType();
-	PartycleType(int charge=0,double mass=0,const char* name=0);
-	virtual void print() const;
-	const char* getName() const  ;
-	double getMass() const;
-	int  getCharge() const ;
-	virtual double getWidth()const;
-	
+  ResonanceType(double width, int charge, double mass, const char *name);
+  ResonanceType(const char *name);
+  double GetWidth() const override;
+  void print() const override;
+
 private:
-	 const char *fName;
-	 const double fMass;
-	 const int fCharge;
+  const double fWidth = 0;
 };
