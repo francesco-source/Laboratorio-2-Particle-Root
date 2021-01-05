@@ -193,3 +193,4 @@ void fit() {
 
   firstFit->Print("Fit_of_Particles.pdf");
   secondFit->Print("Second_fit.pdf");
+}
